@@ -68,10 +68,7 @@ export default function App() {
   }
 
   return (
-    <div
-      className="app"
-      style={{ backgroundImage: `url(${bgImages[bgImage]})` }}
-    >
+    <div className="app" style={{ backgroundImage: `url(${bgImages[bgImage]})` }}>
       {/* HEADER */}
       <div className="app-header">
         <h1 className="logo-text">MiniCalc</h1>
@@ -94,13 +91,62 @@ export default function App() {
         </div>
       </div>
 
-      {/* BACKGROUND SELECTOR */}
-      <div className="bg-panel">
-        {Object.keys(bgImages).map((key) => (
-          <button key={key} onClick={() => setBgImage(key)}>
-            {key.toUpperCase()}
-          </button>
-        ))}
+      {/* CONTAINER FOR BG BUTTONS + CALCULATOR */}
+      <div className="calculator-container">
+        {/* BACKGROUND SELECTOR */}
+        <div className="bg-panel">
+          {Object.keys(bgImages).map((key) => (
+            <button key={key} onClick={() => setBgImage(key)}>
+              {key.toUpperCase()}
+            </button>
+          ))}
+        </div>
+
+        {/* CALCULATOR */}
+        <div className={`calculator ${theme}`}>
+          <div className="history-btn" onClick={() => setShowHistory(!showHistory)}>↺</div>
+          <div className="display">{display}</div>
+
+          <div className="buttons">
+            <button onClick={clear} className="op">C</button>
+            <button onClick={() => scientific("sin")}>sin</button>
+            <button onClick={() => scientific("cos")}>cos</button>
+            <button onClick={() => scientific("tan")}>tan</button>
+            <button onClick={() => input("/")}>÷</button>
+
+            <button onClick={() => input("7")}>7</button>
+            <button onClick={() => input("8")}>8</button>
+            <button onClick={() => input("9")}>9</button>
+            <button onClick={() => input("*")} className="op">×</button>
+            <button onClick={() => scientific("log")}>log</button>
+
+            <button onClick={() => input("4")}>4</button>
+            <button onClick={() => input("5")}>5</button>
+            <button onClick={() => input("6")}>6</button>
+            <button onClick={() => input("-")} className="op">−</button>
+            <button onClick={() => scientific("sqrt")}>√</button>
+
+            <button onClick={() => input("1")}>1</button>
+            <button onClick={() => input("2")}>2</button>
+            <button onClick={() => input("3")}>3</button>
+            <button onClick={() => input("+")} className="op">+</button>
+            <button onClick={() => input("π")}>π</button>
+
+            <button onClick={() => input("0")}>0</button>
+            <button onClick={() => input(".")}>.</button>
+            <button onClick={() => input("e")}>e</button>
+            <button onClick={calculate} className="op">=</button>
+            <button onClick={() => input("**")}>xʸ</button>
+          </div>
+
+          {showHistory && (
+            <div className="history">
+              {history.length === 0 ? "No History" : history.map((h, i) => (
+                <div key={i}>{h.exp} = {h.res}</div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* THEME SELECT */}
@@ -114,61 +160,6 @@ export default function App() {
           <option value="retro">Retro</option>
           <option value="professional">Professional</option>
         </select>
-      </div>
-
-      {/* CALCULATOR */}
-      <div className={`calculator ${theme}`}>
-        <div
-          className="history-btn"
-          onClick={() => setShowHistory(!showHistory)}
-        >
-          ↺
-        </div>
-        <div className="display">{display}</div>
-
-        <div className="buttons">
-          <button onClick={clear} className="op">C</button>
-          <button onClick={() => scientific("sin")}>sin</button>
-          <button onClick={() => scientific("cos")}>cos</button>
-          <button onClick={() => scientific("tan")}>tan</button>
-          <button onClick={() => input("/")}>÷</button>
-
-          <button onClick={() => input("7")}>7</button>
-          <button onClick={() => input("8")}>8</button>
-          <button onClick={() => input("9")}>9</button>
-          <button onClick={() => input("*")} className="op">×</button>
-          <button onClick={() => scientific("log")}>log</button>
-
-          <button onClick={() => input("4")}>4</button>
-          <button onClick={() => input("5")}>5</button>
-          <button onClick={() => input("6")}>6</button>
-          <button onClick={() => input("-")} className="op">−</button>
-          <button onClick={() => scientific("sqrt")}>√</button>
-
-          <button onClick={() => input("1")}>1</button>
-          <button onClick={() => input("2")}>2</button>
-          <button onClick={() => input("3")}>3</button>
-          <button onClick={() => input("+")} className="op">+</button>
-          <button onClick={() => input("π")}>π</button>
-
-          <button onClick={() => input("0")}>0</button>
-          <button onClick={() => input(".")}>.</button>
-          <button onClick={() => input("e")}>e</button>
-          <button onClick={calculate} className="op">=</button>
-          <button onClick={() => input("**")}>xʸ</button>
-        </div>
-
-        {showHistory && (
-          <div className="history">
-            {history.length === 0
-              ? "No History"
-              : history.map((h, i) => (
-                  <div key={i}>
-                    {h.exp} = {h.res}
-                  </div>
-                ))}
-          </div>
-        )}
       </div>
     </div>
   );

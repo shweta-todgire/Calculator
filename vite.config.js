@@ -3,5 +3,5 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/Calculator/",  // <-- Add this line
+  base: "/Calculator/",  // <-- Important! Use your repo name here
 });
