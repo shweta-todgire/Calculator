@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
-// Import all background images
+// Background images
 import background1 from "./assets/bg1.jpg";
 import background2 from "./assets/bg2.jpg";
 import background3 from "./assets/bg3.jpg";
@@ -10,7 +10,15 @@ import background5 from "./assets/bg5.jpg";
 import background6 from "./assets/bg6.jpg";
 import background7 from "./assets/bg7.jpg";
 
-const bgImages = { background1, background2, background3, background4, background5, background6, background7 };
+const bgImages = {
+  background1,
+  background2,
+  background3,
+  background4,
+  background5,
+  background6,
+  background7
+};
 
 export default function App() {
   const [display, setDisplay] = useState("0");
@@ -19,7 +27,7 @@ export default function App() {
   const [theme, setTheme] = useState("default");
   const [bgImage, setBgImage] = useState("background1");
 
-  // Keyboard support
+  // ✅ Keyboard support
   useEffect(() => {
     const handleKey = (e) => {
       if (!isNaN(e.key)) input(e.key);
@@ -28,19 +36,28 @@ export default function App() {
       if (e.key === "Backspace") setDisplay(display.slice(0, -1) || "0");
       if (e.key.toLowerCase() === "c") clear();
     };
+
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [display]);
 
+  // ✅ Touch vibration for mobile
+  function vibrate() {
+    if (navigator.vibrate) navigator.vibrate(40);
+  }
+
   function input(value) {
+    vibrate();
     setDisplay(display === "0" ? value : display + value);
   }
 
   function clear() {
+    vibrate();
     setDisplay("0");
   }
 
   function calculate() {
+    vibrate();
     try {
       const result = eval(display.replace("π", Math.PI).replace("e", Math.E));
       setHistory([{ exp: display, res: result }, ...history]);
@@ -51,9 +68,11 @@ export default function App() {
   }
 
   function scientific(op) {
+    vibrate();
     try {
       let x = eval(display);
       let result;
+
       if (op === "sin") result = Math.sin(x);
       if (op === "cos") result = Math.cos(x);
       if (op === "tan") result = Math.tan(x);
@@ -68,7 +87,11 @@ export default function App() {
   }
 
   return (
-    <div className="app" style={{ backgroundImage: `url(${bgImages[bgImage]})` }}>
+    <div
+      className="app"
+      style={{ backgroundImage: `url(${bgImages[bgImage]})` }}
+    >
+      {/* ✅ HEADER */}
       {/* HEADER */}
       <div className="app-header">
         <h1 className="logo-text">MiniCalc</h1>
@@ -91,68 +114,82 @@ export default function App() {
         </div>
       </div>
 
-      {/* CONTAINER FOR BG BUTTONS + CALCULATOR */}
-      <div className="calculator-container">
-        {/* BACKGROUND SELECTOR */}
-        <div className="bg-panel">
-          {Object.keys(bgImages).map((key) => (
-            <button key={key} onClick={() => setBgImage(key)}>
-              {key.toUpperCase()}
-            </button>
-          ))}
-        </div>
-
-        {/* CALCULATOR */}
-        <div className={`calculator ${theme}`}>
-          <div className="history-btn" onClick={() => setShowHistory(!showHistory)}>↺</div>
-          <div className="display">{display}</div>
-
-          <div className="buttons">
-            <button onClick={clear} className="op">C</button>
-            <button onClick={() => scientific("sin")}>sin</button>
-            <button onClick={() => scientific("cos")}>cos</button>
-            <button onClick={() => scientific("tan")}>tan</button>
-            <button onClick={() => input("/")}>÷</button>
-
-            <button onClick={() => input("7")}>7</button>
-            <button onClick={() => input("8")}>8</button>
-            <button onClick={() => input("9")}>9</button>
-            <button onClick={() => input("*")} className="op">×</button>
-            <button onClick={() => scientific("log")}>log</button>
-
-            <button onClick={() => input("4")}>4</button>
-            <button onClick={() => input("5")}>5</button>
-            <button onClick={() => input("6")}>6</button>
-            <button onClick={() => input("-")} className="op">−</button>
-            <button onClick={() => scientific("sqrt")}>√</button>
-
-            <button onClick={() => input("1")}>1</button>
-            <button onClick={() => input("2")}>2</button>
-            <button onClick={() => input("3")}>3</button>
-            <button onClick={() => input("+")} className="op">+</button>
-            <button onClick={() => input("π")}>π</button>
-
-            <button onClick={() => input("0")}>0</button>
-            <button onClick={() => input(".")}>.</button>
-            <button onClick={() => input("e")}>e</button>
-            <button onClick={calculate} className="op">=</button>
-            <button onClick={() => input("**")}>xʸ</button>
-          </div>
-
-          {showHistory && (
-            <div className="history">
-              {history.length === 0 ? "No History" : history.map((h, i) => (
-                <div key={i}>{h.exp} = {h.res}</div>
-              ))}
-            </div>
-          )}
-        </div>
+      {/* ✅ BACKGROUND BUTTONS */}
+      <div className="bg-panel">
+        {Object.keys(bgImages).map((key) => (
+          <button
+            key={key}
+            onClick={() => {
+              setBgImage(key);
+              vibrate();
+            }}
+          >
+            {key.toUpperCase()}
+          </button>
+        ))}
       </div>
 
-      {/* THEME SELECT */}
+      {/* ✅ CALCULATOR */}
+      <div className={`calculator ${theme}`}>
+        <div
+          className="history-btn"
+          onClick={() => setShowHistory(!showHistory)}
+        >
+          ↺
+        </div>
+
+        <div className="display">{display}</div>
+
+        <div className="buttons">
+          <button onClick={clear} className="op">C</button>
+          <button onClick={() => scientific("sin")}>sin</button>
+          <button onClick={() => scientific("cos")}>cos</button>
+          <button onClick={() => scientific("tan")}>tan</button>
+          <button onClick={() => input("/")}>÷</button>
+
+          <button onClick={() => input("7")}>7</button>
+          <button onClick={() => input("8")}>8</button>
+          <button onClick={() => input("9")}>9</button>
+          <button onClick={() => input("*")} className="op">×</button>
+          <button onClick={() => scientific("log")}>log</button>
+
+          <button onClick={() => input("4")}>4</button>
+          <button onClick={() => input("5")}>5</button>
+          <button onClick={() => input("6")}>6</button>
+          <button onClick={() => input("-")} className="op">−</button>
+          <button onClick={() => scientific("sqrt")}>√</button>
+
+          <button onClick={() => input("1")}>1</button>
+          <button onClick={() => input("2")}>2</button>
+          <button onClick={() => input("3")}>3</button>
+          <button onClick={() => input("+")} className="op">+</button>
+          <button onClick={() => input("π")}>π</button>
+
+          <button onClick={() => input("0")}>0</button>
+          <button onClick={() => input(".")}>.</button>
+          <button onClick={() => input("e")}>e</button>
+          <button onClick={calculate} className="op">=</button>
+          <button onClick={() => input("**")}>xʸ</button>
+        </div>
+
+        {/* ✅ HISTORY PANEL — ONLY RENDERS WHEN BUTTON CLICKED */}
+        {showHistory && (
+          <div className="history show">
+            {history.length === 0
+              ? "No History"
+              : history.map((h, i) => (
+                  <div key={i}>
+                    {h.exp} = {h.res}
+                  </div>
+                ))}
+          </div>
+        )}
+      </div>
+
+      {/* ✅ THEME SELECT */}
       <div className="theme-panel">
         <select onChange={(e) => setTheme(e.target.value)}>
-          <option value="default">Select Theme</option>
+          <option value="default">Theme</option>
           <option value="dark">Dark</option>
           <option value="minimal">Minimal</option>
           <option value="pastel">Pastel</option>

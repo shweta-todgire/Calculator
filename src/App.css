@@ -38,13 +38,6 @@
   font-weight: 600;
 }
 
-/* CONTAINER FOR CALCULATOR + BG BUTTONS */
-.calculator-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 /* CALCULATOR */
 .calculator {
   width: 360px;
@@ -64,10 +57,6 @@
   border-radius: 12px;
   text-align: right;
   margin-bottom: 12px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: clip;
-  direction: rtl;
   transition: background 0.3s ease;
 }
 
@@ -112,10 +101,12 @@ button:active {
 
 /* BACKGROUND PANEL */
 .bg-panel {
+  position: fixed;
+  top: 15px;
+  left: 15px;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-bottom: 15px;
 }
 
 .bg-panel button {
@@ -133,10 +124,12 @@ button:active {
 
 /* THEME SELECT */
 .theme-panel {
-  margin-top: 15px;
+  position: fixed;
+  bottom: 25px;
+  left: 15px;
 }
 
-select {
+select{
   background-color: #a16285;
   height: 30px;
   border: solid 2px #f8aad2;
@@ -170,24 +163,59 @@ select {
   transition: transform 0.2s ease;
 }
 
-.history-btn:hover { transform: rotate(20deg); }
+.history-btn:hover {
+  transform: rotate(20deg);
+}
 
 /* MOBILE RESPONSIVE */
-@media (max-width: 400px) {
-  .calculator { width: 95%; padding: 20px; margin-top: 10px; }
-  .buttons { grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  button { font-size: 14px; height: 50px; }
-  .display { font-size: 22px; padding: 12px; }
+/* ✅ MOBILE FIX ONLY — DESKTOP SAFE */
+@media (max-width: 480px) {
 
-  /* bg panel horizontal on mobile */
   .bg-panel {
+    position: static;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    margin-bottom: 12px;
   }
 
-  .bg-panel button { padding: 6px 10px; font-size: 12px; }
+  .calculator {
+    width: 95%;
+    padding: 20px;
+  }
 
-  /* theme select centered */
-  .theme-panel { display: flex; justify-content: center; }
+  .buttons {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  button {
+    height: 48px;
+    font-size: 13px;
+  }
+
+  .display {
+    font-size: 22px;
+  }
+
+  .theme-panel {
+    position: static;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ✅ Mobile Sliding History */
+  .history {
+    right: 0;
+    top: 100%;
+    width: 100%;
+    height: 150px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+
+  .history.show {
+    transform: translateY(0);
+  }
 }
